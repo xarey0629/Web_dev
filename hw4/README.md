@@ -1,3 +1,9 @@
+Functions:
+ All functions, including advanced ones are done.
+ Please check each functions. 
+ 所有功能皆完成，包括進階功能，請多花些時間試試看囉。
+
+
 # HW4 MineSweeper
 ![](https://i.imgur.com/pfsPBRR.png)
 ## [Demo Video](https://www.youtube.com/watch?v=mDx4bi-rA-Q)
