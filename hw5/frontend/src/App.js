@@ -5,6 +5,7 @@ import { guess, startGame, restart } from './axios';
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
   const [hasWon, setHasWon] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [number, setNumber] = useState('');
   const [status, setStatus] = useState('');
 
@@ -44,12 +45,12 @@ function App() {
       //            request server to random a number
         onClick={
           async () => {
-            const msg = await startGame();
+            const msg = await startGame(setIsError);
             console.log(msg); //  The game is started;
             setHasStarted(true);
           }
         }> start game </button>
-        {/* {!hasStarted ? <div></div> : <div>Error, http status: 500, please restart the Server!</div>} */}
+        {isError ? <div>Error, http status: 500, please restart the Server!</div> : <div></div>}
     </div>
   )
 
@@ -74,13 +75,14 @@ function App() {
       <p>You won! the number was {number}.</p>
       <button  // Handle restart for backend and frontend
         onClick={async () => {
-          const msg = await restart();
+          const msg = await restart(setIsError);
           console.log(msg); //  The game is restarted;
           setHasWon(false);
           setStatus('This is a new game!');
         }
       }
       >restart</button>
+      {isError ? <div>Error, http status: 500, please restart the Server!</div> : <div></div>}
     </>
   )
   

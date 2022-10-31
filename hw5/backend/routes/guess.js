@@ -29,10 +29,10 @@ router.get('/guess', (req, res) => {
     // 如果有問題 =>
     // console.log(!isNaN(guessString));
     if(isNaN(guessString)){
-        res.status(406).send({msg: 'Error: ' + guessString + ' is not a legal number.'});
+        res.status(406).send({msg: 'Error: ' + guessString + ' is not a legal number (1 - 100).'});
     }
     else if(guessNumber < 1 || guessNumber > 100){
-        res.status(406).send({msg: 'Error: ' + guessString + ' is not a legal number.'});
+        res.status(406).send({msg: 'Error: ' + guessString + ' is not a legal number (1 - 100).'});
     }
     // 如果沒有問題，回傳 status
     else if(guessNumber <= 100 && guessNumber >= 1){
