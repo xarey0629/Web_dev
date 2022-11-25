@@ -49,13 +49,11 @@ const useWordle = (solution) => {
         // console.log("Press Enter!!!! Store and reset curGuess!");
         // TODO 4: Check each wordbox's color in `curGuess` and update `guess`, `turn` and `curGuess`
         // Hint: check green first, and then check yellow.
-        let set = new Set([solution[0],solution[1],solution[2],solution[3],solution[4]]);
-        for(let i = 0; i < 5; i++){
-            console.log(set[i]);
-            if(set[i] === curGuess[i]){
-                document.getElementById(turn + "-" + i).className = "Row-wordbox green";
-            }
-        }
+
+        // let set = new Set([solution[0],solution[1],solution[2],solution[3],solution[4]]);
+        // console.log(set);
+        // document.getElementById(turn + "-" + i).className = "Row-wordbox green";
+        
         // add the formatted guess generated into guesses.
         setGuesses(guesses);
         
