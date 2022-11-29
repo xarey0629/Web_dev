@@ -31,8 +31,11 @@ exports.GetSearch = async (req, res) => {
     try {
         const data = await Info.find({
             // ******** Todo - filters ********
-            // ... some Object-key filters
-
+            $and: [
+                (priceFilter) ? { $or: [{price: priceFilter}] } : {},
+                (mealFilter) ? { tag: { "$in" : mealFilter}} : {},
+                (typeFilter) ? { tag: { "$in" : typeFilter}} : {}
+            ]
         }).sort({[sortBy]: 1}) // sort
         if (data.length) {
             res.status(200).send(
@@ -44,6 +47,7 @@ exports.GetSearch = async (req, res) => {
             // console.log('data send', data);
         }
         else {
+            console.log('Meal Filter and Type Filter -> ', mealFilter, typeFilter)
             throw new Error('Something Wrong !')
         }
         
