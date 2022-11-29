@@ -16,6 +16,7 @@ const Information = ({ info, rating }) => {
         return (
             <>
                 {/* TODO Part III-2-a render tags */}
+                {tags.map((tag)=>(<div className='tag' key={tag}>{tag}</div>))}
             </>
         )
     }
@@ -26,15 +27,22 @@ const Information = ({ info, rating }) => {
         return (
             <>
                 {/* TODO Part III-2-a render price tags; hint: convert price number to dollar signs first */}
+                <div className='tag'>{priceText}</div>
             </>
         )
     }
-
+    
     const getBusiness = (time) => {
         
         return (
             <div className='businessTime'>
                 {/* TODO Part III-2-c: render business time for each day*/}
+                {Object.keys(time).map((k)=> (
+                    <div className='singleDay' key={k}>
+                        <div className='time'>{k}</div>
+                        <div className='day'>{time[k]}</div>
+                    </div>
+                ) ) }
             </div>
         )
     }

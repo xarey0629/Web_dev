@@ -27,6 +27,28 @@ exports.GetCommentsByRestaurantId = async (req, res) => {
     //    message: 'error'
     //    contents: []
     // }
+
+    let result = []
+    try {
+        await Comment.find({id: id}, (err, data) => {
+            if (err) throw new Error("guerying error: GetComment")
+            console.log(data.length)
+            result = data
+            // result = tidyUpData(data, result)
+        } ).clone();
+        console.log('data send')
+        res.status(200).send({
+          message: 'success',
+          data: result// the data after tidy up
+        })
+    } catch (err) {
+      console.error(err.name + ' ' + err.message)
+      res.status(403).send({
+        message: 'error',
+        data: []// the data after tidy up
+      })
+    }
+
 }
 
 exports.CreateComment = async (req, res) => {

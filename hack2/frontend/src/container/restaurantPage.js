@@ -30,10 +30,14 @@ const RestaurantPage = () => {
     }
     const getComments = async () => {
         // TODO Part III-3: get a restaurant's comments 
+        const resp = await instance.get("/getCommentsByRestaurantId", { params: { id: id} });
+        setComments(resp.data.data);
+        // console.log(resp.data.data);
     }
     useEffect(() => {
         if (Object.keys(info).length === 0) {
             getInfo()
+            getComments()
         }
     }, [])
     
