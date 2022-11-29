@@ -50,7 +50,6 @@ exports.GetSearch = async (req, res) => {
             console.log('Meal Filter and Type Filter -> ', mealFilter, typeFilter)
             throw new Error('Something Wrong !')
         }
-        
     } catch (err) {
       console.error(err.name + ' ' + err.message)
       res.status(403).send(

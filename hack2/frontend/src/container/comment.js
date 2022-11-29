@@ -18,7 +18,7 @@ const instance = axios.create({
 })
 
 const Comment = ({ restaurantId, comments, setComments, setLoad }) => {
-    const [rating, setRating] = useState(0)
+    const [rating, setRating] = useState(1)
     const [name, setName] = useState('')
     const [content, setContent] = useState('')
 
@@ -44,7 +44,7 @@ const Comment = ({ restaurantId, comments, setComments, setLoad }) => {
         storeComment().then( () => {
             setName('')
             setContent('')
-            setRating(0)
+            setRating(1)
         }
         )
     }
