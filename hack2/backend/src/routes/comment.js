@@ -56,4 +56,20 @@ exports.CreateComment = async (req, res) => {
     const body = req.body
     /****************************************/
     // TODO Part III-3-b: create a new comment to a restaurant
+    console.log(body)
+
+    try {
+        await Comment.insertMany(body, (err) => {
+            if (err) throw new Error("add error: AddComment")
+          } )
+        console.log('add data successful')
+        res.status(200).send({
+          message: 'success',
+        })
+    } catch (err) {
+      console.error(err.name + ' ' + err.message)
+      res.status(403).send({
+        message: 'error',
+      })
+    }
 }
