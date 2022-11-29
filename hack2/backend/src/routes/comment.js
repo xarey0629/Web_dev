@@ -81,6 +81,12 @@ exports.CreateComment = async (req, res) => {
             res.status(200).send(
                 {
                     message: 'success',
+                    comment: {
+                        restaurantId: restaurantId, 
+                        name: name,
+                        rating: rating,
+                        content: content
+                    }
             })
         }
         else{
