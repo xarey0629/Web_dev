@@ -24,31 +24,37 @@ exports.GetSearch = async (req, res) => {
     //   do res.status(200).send({ message: 'success', contents: ... })
     // When fail,
     //   do res.status(403).send({ message: 'error', contents: ... }) 
-    let data = []
     let result = []
-    try {
-        await Info.find({
-            // price: priceFilter,
-            // tag: typeFilter,
-            // sortby
 
-        }, (err, data) => {
-            if (err) throw new Error("guerying error: GetSearch")
-            console.log(data.length)
-            result = data
-            // result = tidyUpData(data, result)
-        } ).clone();
-        console.log('data send')
-        res.status(200).send({
-          message: 'success',
-          data: result // the data after tidy up
-        })
+    // conso
+    
+    try {
+        const data = await Info.find({
+            // ******** Todo - filters ********
+            // ... some Object-key filters
+
+        }).sort({[sortBy]: 1}) // sort
+        if (data.length) {
+            res.status(200).send(
+                {
+                    message: 'success',
+                    contents: data // the data after tidy up
+                }
+            );
+            // console.log('data send', data);
+        }
+        else {
+            throw new Error('Something Wrong !')
+        }
+        
     } catch (err) {
       console.error(err.name + ' ' + err.message)
-      res.status(403).send({
-        message: 'error',
-        data: [] // the data after tidy up
-      })
+      res.status(403).send(
+        {
+            message: 'error',
+            contents: null // the data after tidy up
+        }
+      )
     }
 
     // TODO Part I-3-a: find the information to all restaurants
@@ -83,13 +89,13 @@ exports.GetInfo = async (req, res) => {
         console.log('data send')
         res.status(200).send({
           message: 'success',
-          data: result// the data after tidy up
+          contents: result// the data after tidy up
         })
     } catch (err) {
       console.error(err.name + ' ' + err.message)
       res.status(403).send({
         message: 'error',
-        data: []// the data after tidy up
+        contents: null// the data after tidy up
       })
     }
 }

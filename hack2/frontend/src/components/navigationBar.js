@@ -19,9 +19,13 @@ const NavBar = () => {
     const [mealFilter, setMealFilter] = useState([])
     const [typeFilter, setTypeFilter] = useState([])
 
+    // Filter option display
     const [display, setDisplay] = useState("")
+
+    // Sort by price or distance
     const options = ["price", "distance"];
     const [sortMethod, setSortMethod] = useState(options[0]);
+
     // Blank all
     const [filterExpanded, setFilterExpanded] = useState(false);
 

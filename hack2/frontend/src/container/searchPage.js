@@ -19,6 +19,7 @@ const SearchPage = () => {
     const { state } = useLocation();
     // console.log(state);
     const [restaurants, setRestaurant] = useState([])
+
     const getRestaurant = async () => {
         // TODO Part I-3-b: get information of restaurants from DB
         const resp = await instance.get("/getSearch", {params:{
@@ -27,10 +28,10 @@ const SearchPage = () => {
             typeFilter: state.typeFilter,
             sortBy: state.sortBy
         }});
-        setRestaurant(resp.data.data);
-        console.log(restaurants);
+        setRestaurant(resp.data.contents);
     }
-    console.log(restaurants);
+    console.log("state",state)
+    console.log("Restaurants info", restaurants);
 
     useEffect(() => {
         getRestaurant()
@@ -40,8 +41,7 @@ const SearchPage = () => {
     const navigate = useNavigate();
     const ToRestaurant = (id) => {
         // TODO Part III-1: navigate the user to restaurant page with the corresponding id
-        navigate('/restaurant/'+id, {
-        });
+        navigate('/restaurant/'+id);
     }
     const getPrice = (price) => {
         let priceText = ""
@@ -61,14 +61,16 @@ const SearchPage = () => {
                             <img className='resImg' src={item.img}/>
                         </div>
                         <div className='resInfo'>
-                            <div className='title'>
-                                <p className='name'>{item.name}</p>
-                                <p className='price'>{getPrice(item.price)}</p>
-                                <p className='distance'>{`${item.distance/1000} km`}</p>
+                            <div className='infoContainer'>
+                                <div className='title'>
+                                    <p className='name'>{item.name}</p>
+                                    <p className='price'>{getPrice(item.price)}</p>
+                                    <p className='distance'>{`${item.distance/1000} km`}</p>
+                                </div>
+                                <p className='description'>
+                                {item.tag.join(', ')}
+                                </p>
                             </div>
-                            <p className='description'>
-                               {item.tag.join(', ')}
-                            </p>
                         </div>
                     </div>
                 ))

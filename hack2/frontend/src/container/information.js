@@ -33,16 +33,28 @@ const Information = ({ info, rating }) => {
     }
     
     const getBusiness = (time) => {
+        console.log(time.All)
         
         return (
             <div className='businessTime'>
                 {/* TODO Part III-2-c: render business time for each day*/}
-                {Object.keys(time).map((k)=> (
-                    <div className='singleDay' key={k}>
-                        <div className='time'>{k}</div>
-                        <div className='day'>{time[k]}</div>
+                {/* time is an object */}
+                {/* // all */}
+                {time.All 
+                ?  
+                 ["Mon", "Tue", "Wed", "Thr", "Fri", "Sat", "Sun"].map((x) => (
+                    <div className='singleDay' key={x}>
+                        <div className='day'>{x}</div>
+                        <div className='time'>{time.All}</div>
                     </div>
-                ) ) }
+                 ))
+                : ["Mon", "Tue", "Wed", "Thr", "Fri", "Sat", "Sun"].map((x) => (
+                    <div className='singleDay' key={x}>
+                        <div className='day'>{x}</div>
+                        <div className='time'>{x in time ? time[x] : "Closed"}</div>
+                    </div>
+                ))
+                }
             </div>
         )
     }

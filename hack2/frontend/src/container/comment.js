@@ -41,7 +41,9 @@ const Comment = ({ restaurantId, comments, setComments, setLoad }) => {
         // TODO Part III-3-b: submit a comment and reset input fields
         storeComment().then( () => {
             setName('')
-            setContent('')}
+            setContent('')
+            setRating(0)
+        }
         )
     }
     

@@ -12,7 +12,7 @@ import Comment from '../models/comment'
 
 exports.GetCommentsByRestaurantId = async (req, res) => {
     /*******    NOTE: DO NOT MODIFY   *******/
-    const id = req.query.restaurantId
+    const id = req.query.id
     /****************************************/
     // TODO Part III-3-a: find all comments to a restaurant
 
@@ -28,24 +28,31 @@ exports.GetCommentsByRestaurantId = async (req, res) => {
     //    contents: []
     // }
 
-    let result = []
     try {
-        await Comment.find({id: id}, (err, data) => {
-            if (err) throw new Error("guerying error: GetComment")
-            console.log(data.length)
-            result = data
-            // result = tidyUpData(data, result)
-        } ).clone();
-        console.log('data send')
-        res.status(200).send({
-          message: 'success',
-          data: result// the data after tidy up
-        })
+        const result = await Comment.find({restaurantId: id})
+        //     (err, data) => {
+        //     if (err) throw new Error("guerying error: GetComment")
+        //     console.log(data.length)
+        //     result = data
+        //     // result = tidyUpData(data, result)
+        // } ).clone();
+        if( result ){
+            console.log('Comments send')
+            res.status(200).send(
+                {
+                    message: 'success',
+                    contents: result// the data after tidy up
+            })
+        }
+        else{
+            throw new Error('Something Wrong !')
+        }
     } catch (err) {
       console.error(err.name + ' ' + err.message)
-      res.status(403).send({
-        message: 'error',
-        data: []// the data after tidy up
+      res.status(403).send(
+        {
+            message: 'error',
+            contents: []// the data after tidy up
       })
     }
 
@@ -53,19 +60,35 @@ exports.GetCommentsByRestaurantId = async (req, res) => {
 
 exports.CreateComment = async (req, res) => {
     /*******    NOTE: DO NOT MODIFY   *******/
-    const body = req.body
+    const restaurantId = req.body.restaurantId;
+    const name = req.body.name;
+    const rating = req.body.rating;
+    const content = req.body.content;
     /****************************************/
     // TODO Part III-3-b: create a new comment to a restaurant
-    console.log(body)
+    console.log("Create comment",restaurantId, name, rating, content)
 
     try {
-        await Comment.insertMany(body, (err) => {
-            if (err) throw new Error("add error: AddComment")
-          } )
-        console.log('add data successful')
-        res.status(200).send({
-          message: 'success',
+        const newComment = new Comment({
+            restaurantId: restaurantId, 
+            name: name,
+            rating: rating,
+            content: content
         })
+        await newComment.save();
+        if( newComment){
+            console.log(' Create New Comment successfully')
+            res.status(200).send(
+                {
+                    message: 'success',
+            })
+        }
+        else{
+            throw new Error('Something Wrong !')
+        }
+        // await Comment.insertMany(body, (err) => {
+        //     if (err) throw new Error("add error: AddComment")
+        //   } )
     } catch (err) {
       console.error(err.name + ' ' + err.message)
       res.status(403).send({

@@ -22,16 +22,18 @@ const RestaurantPage = () => {
     const [info, setInfo] = useState({})
     const [comments, setComments] = useState([])
     const [loading, setLoading] = useState(true)
+    // const [rating, setRating] = useState(0);
+
     const getInfo = async () => {
         // TODO Part III-2: get a restaurant's info
         const resp = await instance.get("/getInfo", { params: { id: id} });
-        setInfo(resp.data.data);
+        setInfo(resp.data.contents);
         // console.log(resp.data.data);
     }
     const getComments = async () => {
         // TODO Part III-3: get a restaurant's comments 
         const resp = await instance.get("/getCommentsByRestaurantId", { params: { id: id} });
-        setComments(resp.data.data);
+        setComments(resp.data.contents);
         // console.log(resp.data.data);
     }
     useEffect(() => {
@@ -46,8 +48,19 @@ const RestaurantPage = () => {
     }, [comments])
 
     /* TODO Part III-2-b: calculate the average rating of the restaurant */
+
     let rating = 0;
-    
+    if( comments.length ){
+        for(let i = 0; i < comments.length; i++){
+            rating += comments[i].rating / comments.length;
+        }
+        console.log('Comments total rating', rating);
+    }
+    // rating = rating / comments.length;
+
+
+
+
     return (
         <div className='restaurantPageContainer'>
             {Object.keys(info).length === 0 ? <></> : <Information info={info} rating={rating} />}

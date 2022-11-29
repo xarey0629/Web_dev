@@ -13,7 +13,9 @@ const Filter = ({ priceFilter, setPriceFilter, mealFilter, setMealFilter, typeFi
     const PriceTag = ["$", "$$", "$$$"]
     const MealTag = ["Breakfast", "Lunch", "Dinner"]
     const TypeTag = ["Chinese", "American", "Italian", "Japanese", "Korean", "Thai"]
+
     const getTagString = () => {
+
         const getSingleCategoryTag = (tag, filter, result) => {
             for(let i=0; i<tag.length; i++){
                 if(filter.includes(tag[i])){
@@ -28,7 +30,8 @@ const Filter = ({ priceFilter, setPriceFilter, mealFilter, setMealFilter, typeFi
         result = getSingleCategoryTag(PriceTag, priceFilter, result)
         result = getSingleCategoryTag(MealTag, mealFilter, result)
         result = getSingleCategoryTag(TypeTag, typeFilter, result)
-        
+        //
+        console.log('Tag filter result', result);
         return result
     }
 
