@@ -68,6 +68,7 @@ const query = async(req, res) => {
 
 
 const router = Router();
+// 3 APIs
 router.delete("/cards", deleteDB);
 router.post("/card", saveUser);
 router.get("/cards", query);
