@@ -1,22 +1,27 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { message } from 'antd';
-import { client } from '../Containers/ChatRoom';
+// import { client } from '../Containers/ChatRoom';
+// import { CHATBOX_QUERY } from "../graphql/queries";
+// import { CREATE_CHATBOX_MUTATION } from "../graphql/mutations";
+// import { useMutation, useQuery } from "@apollo/client";
 
 const ChatContext = createContext({
     status: {},
     me: "",
+    friend: "",
     signedIn: false,
     messages: [],
     currentBoxName: "",
     setStatus: () => {},
     setMe: () => {},
+    setFriend: () => {},
     setSignedIn: () => {},
     setMessages: () => {},
     setCurrentBoxName: () => {},
     sendMessage: () => {},
     clearMessages: () => {},
     displayStatus: () => {},
-    startChat: () => {},
+    // startChat: () => {},
     sendData: () => {},
 })
 
@@ -28,10 +33,18 @@ const ChatProvider = (props) => {
     // States
     const [status, setStatus] = useState("");
     const [me, setMe] = useState(savedMe || "");
+    const [friend, setFriend] = useState("");
     const [signedIn, setSignedIn] = useState(false);
     const [messages, setMessages] = useState([]);
     const [currentBoxName, setCurrentBoxName] = useState("");
 
+    // // GraphQL
+    // const { data, loading, subscribeToMore} 
+    // = useQuery(CHATBOX_QUERY, {variables: {name1: me, name2: friend}});
+
+    // const [startChat] = useMutation(CREATE_CHATBOX_MUTATION);
+
+    // Local Storage
     useEffect(() => {
         if(signedIn){
             localStorage.setItem(LOCALSTORAGE_KEY, me);
@@ -39,38 +52,38 @@ const ChatProvider = (props) => {
     }, [me, signedIn]);
 
     // Functions
-    const sendData = async(data) => {
-        await client.send(JSON.stringify(data));
-    }
+    // const sendData = async(data) => {
+    //     await client.send(JSON.stringify(data));
+    // }
 
-    const sendMessage = (payload) => {
+    // const sendMessage = (payload) => {
     
-        // Update messages and status
-        // setMessages(
-        //     [
-        //     ...messages,
-        //     payload
-        //     ]
-        // )
+    //     // Update messages and status
+    //     // setMessages(
+    //     //     [
+    //     //     ...messages,
+    //     //     payload
+    //     //     ]
+    //     // )
     
-        // setStatus({
-        //     type: "success",
-        //     msg: "Message sent."
-        // })
+    //     // setStatus({
+    //     //     type: "success",
+    //     //     msg: "Message sent."
+    //     // })
 
-        // include three main characters -> 包在payload裡頭？ payload: {name: me, friend: activeKey, body: msg}
-        // sender chatBox body
-        sendData(["input", payload]);
-        // console.log(payload);
-    }
+    //     // include three main characters -> 包在payload裡頭？ payload: {name: me, friend: activeKey, body: msg}
+    //     // sender chatBox body
+    //     sendData(["input", payload]);
+    //     // console.log(payload);
+    // }
 
-    const clearMessages = () => {
-        // setMessages([]);
+    // const clearMessages = () => {
+    //     // setMessages([]);
 
-        // 隸屬於哪個chatBox的messages
-        sendData(["clear"]);
-        // console.log("Send clear request.");
-    };
+    //     // 隸屬於哪個chatBox的messages
+    //     sendData(["clear"]);
+    //     // console.log("Send clear request.");
+    // };
 
     const displayStatus = (s) => {
         if(s.msg){
@@ -94,29 +107,31 @@ const ChatProvider = (props) => {
       displayStatus(status)
     }, [status]);
 
-    const startChat = (payload) => {
-        // payload = [name, to]
-        sendData(['Init', payload]);
-    } 
+    // const startChat = (payload) => {
+    //     // payload = [name, to]
+    //     sendData(['Init', payload]);
+    // } 
 
     return(
         <ChatContext.Provider
             value={{
                 status, 
                 me, 
+                friend,
                 signedIn, 
                 messages, 
                 currentBoxName,
                 setStatus, 
                 setMe, 
+                setFriend,
                 setSignedIn, 
                 setMessages, 
                 setCurrentBoxName,
-                sendMessage, 
-                clearMessages, 
+                // sendMessage, 
+                // clearMessages, 
                 displayStatus,
-                startChat,
-                sendData,
+                // startChat,
+                // sendData,
             }}
             {...props}
         />

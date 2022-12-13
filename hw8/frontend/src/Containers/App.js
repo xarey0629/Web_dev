@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
 // import { BrowserRouter } from "react-router-dom";
 import { ChatRoom } from './ChatRoom';
 import SignIn from './SignIn';

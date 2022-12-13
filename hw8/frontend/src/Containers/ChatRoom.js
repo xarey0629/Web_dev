@@ -5,6 +5,10 @@ import Title from "../Components/Title"
 import Message from "../Components/Message";
 import ChatModal from "../Components/ChatModal";
 import { useChat } from "../Hooks/useChat";
+import { CHATBOX_QUERY } from "../graphql/queries";
+import { CREATE_CHATBOX_MUTATION, CREATE_MESSAGE_MUTATION } from "../graphql/mutations";
+import { MESSAGE_SUBSCRIPTION } from "../graphql/subscriptions";
+import { ApolloError, useMutation, useQuery } from "@apollo/client";
 
 const Chatroom = styled.div`
     display: flex;
@@ -31,12 +35,12 @@ const FootRef = styled.div`
 `
 
 // Define WebSocket client side 
-const client = new WebSocket('ws://localhost:4000');
+// const client = new WebSocket('ws://localhost:4000');
 
 const ChatRoom = () => {
 
     // States
-    const {status, me, messages, currentBoxName, setStatus, setMessages, sendMessage, setCurrentBoxName, clearMessages, displayStatus, startChat} = useChat();
+    const {status, me, friend, messages, currentBoxName, setStatus, setFriend, setMessages, setCurrentBoxName, clearMessages, displayStatus} = useChat();
     // const [username, setUsername] = useState('');
     const [body, setBody] = useState('');  // text body
     const bodyRef = useRef(null);
@@ -45,23 +49,6 @@ const ChatRoom = () => {
     const [chatBoxes, setChatBoxes] = useState([]);
     const [activeKey, setActiveKey] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
-
-
-    // Refs
-    const msgFooter = useRef(null);
-    
-    // Functions
-
-    // Scroll to bottom.
-    const scrollToBottom = () => {
-        msgFooter.current?.scrollIntoView({ behavior: 'smooth', block: "start" });
-        console.log("Scroll!", msgFooter.current)
-    }
-    
-    useEffect(() => {
-        scrollToBottom();
-        setMsgSent(false);
-    }, [msgSent]);
 
     // Show Messages in the chatbox
     // ***
@@ -87,6 +74,9 @@ const ChatRoom = () => {
         );
     } 
 
+    // Refs
+    const msgFooter = useRef(null);
+
     const InitChatBox = (chatBoxName) => {
         const currentChatBox = chatBoxes.find(({key}) => key === activeKey);
         if(currentChatBox){
@@ -101,24 +91,83 @@ const ChatRoom = () => {
         }
     }
 
+    // Scroll to bottom.
+    const scrollToBottom = () => {
+        msgFooter.current?.scrollIntoView({ behavior: 'smooth', block: "start" });
+        console.log("Scroll!", msgFooter.current)
+    }
+
+    // GraphQL
+    
+    const { data, loading, subscribeToMore } 
+    = useQuery(CHATBOX_QUERY, {variables: {name1: me, name2: friend}});
+    console.log("Me & Friend:", me,friend);
+    console.log("data from query:", data);
+    // const error = ApolloError;
+    // console.log(error);
+    // if(data?.chatbox){
+    //     setMessages(data.chatbox.messages);
+    // }
+    
+    const [startChat] = useMutation(CREATE_CHATBOX_MUTATION);
+    const [sendMessage] = useMutation(CREATE_MESSAGE_MUTATION);
+
     useEffect(() => {
-        if(true){
-            InitChatBox(currentBoxName);
-        }
-    }, [messages]);
+        try{
+            console.log("Try subcribe");
+            subscribeToMore({
+                document: MESSAGE_SUBSCRIPTION,
+                variables: {from: me, to: friend},
+                updateQuery: (prev, {subscriptionData}) => {
+                    if(!subscriptionData){
+                        console.log("Subscription failed");
+                        return prev;
+                    }
+                    console.log("Sub Data!", subscriptionData);
+                    const newMessage = subscriptionData.data.message;
+                    console.log("newMessage: ", newMessage)
+                    return {
+                        chatbox:{
+                            // name:[me, friend].sort().join('_'),
+                            name: prev.chatbox.name,
+                            messages: [...prev.chatbox.messages, newMessage],
+                        }
+                    };
+                },
+                onError: err => console.log(err),
+            });
+        }catch(e){console.log("Error:", e)};
+        
+    }, [subscribeToMore, me, friend]);
+    
+    // if(loading){
+    //     displayStatus({
+    //         type: 'success',
+    //         msg: 'Receive messages.'
+    //     })
+    // }
+    
+    if(data?.chatbox){
+        setMessages(data.chatbox.messages);
+        InitChatBox(currentBoxName);
+        scrollToBottom();
+    }
 
     // useEffect(() => {
-    //     // try {
-    //     //     const currentChatBox = chatBoxes.find(({key}) => key === activeKey);
-    //     //     console.log('Successfully find chatbox', currentChatBox);
+    //     if(true){
+    //         InitChatBox(currentBoxName);
+    //     }
+    // }, [messages]);
 
-    //     //     if(currentChatBox){
-    //     //         currentChatBox.children = extractChat(activeKey);
-    //     //     }
-    //     // }catch(e){
-    //     //     console.log(e);
-    //     // }
-    // }, [status]);
+
+    
+    // Functions
+    
+    // useEffect(() => {
+    //     scrollToBottom();
+    //     setMsgSent(false);
+    // }, [msgSent]);
+
 
     // Tabs: addition and deletion
     const removeChatBox = (targetKey) => {
@@ -156,54 +205,46 @@ const ChatRoom = () => {
 
     // WebSocket
     // const client = new WebSocket('ws://localhost:4000');
-    client.onopen = () => {
-        console.log("WebSocket client side is connected.")
-    }
+    // client.onopen = () => {
+    //     console.log("WebSocket client side is connected.")
+    // }
     // const sendData = async(data) => {
     //     await client.send(JSON.stringify(data));
     // }
-    client.onmessage = (byteString) => {
-        const {data} = byteString; // 拿出資料裡面的data屬性。
-        const [task, payload, chatBoxName] = JSON.parse(data); // ['', {}]
-        switch(task){
-            case "Init":{
-                setTimeout(() => {
-                    setMessages(payload);
-                },100);
-                setCurrentBoxName(chatBoxName);
-                // InitChatBox(chatBoxName);
-                console.log('Init payload:', payload);
-                break;
-            }
-            
-            // case 'backToSender':{
-            //     console.log('Message Content: ', payload);
-            //     setMessages([...messages, payload]);
-            //     // InputMessage(payload);
-            //     // setMsgSent(true);
-            //     console.log(messages);
-            //     break;
-            // }
+    // client.onmessage = (byteString) => {
+    //     const {data} = byteString; // 拿出資料裡面的data屬性。
+    //     const [task, payload, chatBoxName] = JSON.parse(data); // ['', {}]
+    //     // switch(task){
+    //     //     case "Init":{
+    //     //         setTimeout(() => {
+    //     //             setMessages(payload);
+    //     //         },100);
+    //     //         setCurrentBoxName(chatBoxNa
+    //     //             me);
+    //     //         // InitChatBox(chatBoxName);
+    //     //         console.log('Init payload:', payload);
+    //     //         break;
+    //     //     }
 
-            case 'backToReceiver':{
-                console.log('Receiver\'s Message  Content: ', payload);
-                setMessages([...messages, payload]);
-                setMsgSent(true);
-                console.log(messages);
-                break;
-            }
+    //     //     case 'backToReceiver':{
+    //     //         console.log('Receiver\'s Message  Content: ', payload);
+    //     //         setMessages([...messages, payload]);
+    //     //         setMsgSent(true);
+    //     //         console.log(messages);
+    //     //         break;
+    //     //     }
 
-            case "cleared":{
-                setMessages([]);
-                break;
-            }
-            case "status":{
-                setStatus(payload);
-                break;
-            }
-            default: break;    
-        }
-    }
+    //     //     case "cleared":{
+    //     //         setMessages([]);
+    //     //         break;
+    //     //     }
+    //     //     case "status":{
+    //     //         setStatus(payload);
+    //     //         break;
+    //     //     }
+    //     //     default: break;    
+    //     // }
+    // }
 
 
 
@@ -217,11 +258,11 @@ const ChatRoom = () => {
             <ChatBoxesWrapper>
                 <Tabs
                     type="editable-card"
-                    onChange={(key) => {
+                    onChange={async (key) => {
                         setActiveKey(key);
-                        // extractChat(key);
-                        startChat({name: me, friend: key}); // {name, friend}
-                        setMsgSent(true);
+                        setFriend(key);
+                        await startChat({variables: { name1: me, name2: key }}); // {name, friend}
+                        // setMsgSent(true);
                     }}
                     onEdit={(targetKey, action) => {
                         if (action === 'add') {
@@ -239,11 +280,12 @@ const ChatRoom = () => {
             </ChatBoxesWrapper>
             <ChatModal
                 open={modalOpen}
-                onCreate={({ name }) => {
+                onCreate={async({ name }) => {
                     // 按下 Create 後的動作
+                    setFriend(name);
                     setActiveKey(createChatBox(name)); // create new Tab and return friend's name as ActiveKey
                     // extractChat(name);
-                    startChat({name: me, friend: name}); // Notice backend: {name, friend}
+                    await startChat( { variables: { name1: me, name2: name } } ); // Notice backend: {name, friend}
                     setModalOpen(false);
                 }}
                 onCancel={() => { setModalOpen(false);}}
@@ -272,7 +314,7 @@ const ChatRoom = () => {
                         })
                         return;
                     }
-                    sendMessage({name: me, friend: activeKey, body: msg}); // {name, friend, body}
+                    sendMessage({ variables: {name: me, to: activeKey, body: msg} }); // {name, to, body}
                     setMsgSent(true);
                     setBody(''); // 清空Body內容
                     
@@ -283,4 +325,4 @@ const ChatRoom = () => {
 }
 
 // export default ChatRoom;
-export { ChatRoom, client }
+export { ChatRoom }
