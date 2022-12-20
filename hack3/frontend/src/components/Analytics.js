@@ -8,9 +8,21 @@ import Category from './Category';
 function Analytics() {
   // TODO 2.2 Use the useQuery hook to get items from backend
   const {
-    loading, error, data: {items}, subscribeToMore,
+    loading, error, data: itemsData, subscribeToMore,
   } = useQuery(GET_ITEMS_QUERY);
   // TODO 2.2 End
+  
+  if (loading) return <p>Loading...</p>;
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return (<p>Error :(</p>);
+  }
+    const {items} = itemsData;
+
+  // setTimeout(() => {
+
+  // }, 1000)
 
   return (
     <div className="grid grid-cols-12 gap-6">
