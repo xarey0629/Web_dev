@@ -8,7 +8,7 @@ type Query {
 
 type ChatBox{
   name: String!
-  messages: [Message!]!
+  messages: [Message!]! # Not a leaf. 
 }
 
 type Message{

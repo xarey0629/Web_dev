@@ -1,0 +1,19 @@
+Backend:
+0. Build up mongoose.model.
+    -> 1. new Schema
+    -> 2. mongoose.model()
+
+1. Build up "schema.graphql".
+    -> 1. type Query, Mutation, Subscription.
+    -> 2. type OutputType.
+    -> 3. input InputType.
+
+2. Build up server.
+    -> 1. createPubSub(), createYoga, createSchema. Notice schema, resolvers & context.
+    -> 2. build up httpServer (default endpoint:/graphql) and wsServer.       
+
+3. Define Resolvers.
+    -> 1. If not a leaf node -> type!
+    -> 2. Don't forget "parent", { ChatBoxModel, db }.
+
+Frontend:
