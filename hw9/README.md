@@ -31,4 +31,4 @@ Deployment
 
 Some Troubles:
 -
-- In frontend, I originally thought I had to input internal ip as my URL, but finally public worked. It's kind of weird whatsoever.
+- In frontend, I originally thought I had to input internal IP as my URL, but finally public worked. It's kind of weird whatsoever.
