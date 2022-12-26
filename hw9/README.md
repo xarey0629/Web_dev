@@ -26,5 +26,6 @@
 - Step.7: Success! You can travel through the http://<publicIP>:3000/ anywhere!
 
 
-Some Troubles: In frontend, I originally thought I had to input internal ip as my URL, but finally public worked. It's kind of weird whatsoever.
+Some Troubles:
 -
+- In frontend, I originally thought I had to input internal ip as my URL, but finally public worked. It's kind of weird whatsoever.
