@@ -6,6 +6,9 @@
 
 - Function: The same as HW8. Allow users to chat in real-time. 
 
+Deployment
+-
+
 - Step.1: Sing up for GCP(get 300$ free quota).
 
 - Step.2: 
