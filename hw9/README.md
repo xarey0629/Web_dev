@@ -8,10 +8,10 @@ Step.1: Sing up for GCP(get 300$ free quota).
 
 Step.2: 
 
-	2-0. Build a VM.
-	2-1. Set up static public IP and range to 0.0.0.0.
-	2-2. Add you port(3000, 4000) into firewall whitelist.
-	2-3. Allow HTTPS and HTTP traffic.
+		2-0. Build a VM.
+		2-1. Set up static public IP and range to 0.0.0.0.
+		2-2. Add you port(3000, 4000) into firewall whitelist.
+		2-3. Allow HTTPS and HTTP traffic.
 
 Step.3: Push your code up to GitHub(individual repo).
 
