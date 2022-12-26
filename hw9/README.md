@@ -4,6 +4,8 @@
 
 - Deploy through GCP.
 
+- Function: The same as HW8. Allow users to chat in real-time. 
+
 Step.1: Sing up for GCP(get 300$ free quota).
 
 Step.2: 
@@ -22,3 +24,6 @@ Step.5: Clone your repo and "yarn" to set up the environment.
 Step.6: Open two terminals by tmux and run the frontend and the backend separately.
 
 Step.7: Success! You can travel through the http://<publicIP>:3000/ anywhere!
+
+
+- Some Troubles: In frontend, I originally thought I had to input internal ip as my URL, but finally public worked. It's kind of weird whatsoever.
