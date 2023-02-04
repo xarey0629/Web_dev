@@ -1,7 +1,15 @@
-# Web Programming Class Repo Template
+# Welcome to my Web Programming development learning document.
+- ✔I try to record everything I learned in here.
+- 📚Additionally, it contains a lecture called Web Programming in NTU taught by Ric. 
 - Class Website: https://wp.ee.ntu.edu.tw
-- Webex Meeting Link: [Link](https://ntucc.webex.com/meet/cyhuang)
-- Webex User Guide: [Link](https://hackmd.io/9H-sQ4krS_CgTsVr2BflRQ?view)
 
-9/23 00:41 Try to upload.
-
+# ✏Contents
+- HW1: 
+- HW2:
+- HW3:
+- HW4:
+- HW5:
+- HW6:
+- HW7:
+- HW8:
+- HW9:
